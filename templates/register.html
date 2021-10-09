@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <!-- https://getbootstrap.com/docs/4.5/getting-started/introduction/-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+
+    <title>Registro de novo usuário</title>
+  </head>
+  <body>
+
+    <!-- Messages -->
+    {% for category, message in get_flashed_messages(with_categories=true) %}
+    <div class="alert alert-{{category}}">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+
+    <h1>Registro de novo usuário</h1>
+
+    <form method="post">
+        <label for="username">Username</label>
+        <input name="username" id="username" required><br>
+        <label for="name">Name</label>
+        <input name="name" id="name" required><br>
+        <label for="email">E-mail</label>
+        <input name="email" id="email" required><br>
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" required><br>
+        <label for="password">Confirma Password</label>
+        <input type="password" name="confirma_password" id="confirma_password" required><br>
+        <input type="submit" value="Register">
+    </form>
+
+    <br>
+    <a href="{{ url_for('login_page') }}">Login</a> 
+    <br>
+
+    <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+
+  </body>
+</html>
