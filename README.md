@@ -45,3 +45,5 @@ Os seguintes módulos são usados para auxiliar o gerenciamento das chamadas das
 [render_template](https://flask.palletsprojects.com/en/2.0.x/api/#flask.render_template), [request](https://flask.palletsprojects.com/en/2.0.x/api/#flask.request), 
 [redirect](https://flask.palletsprojects.com/en/2.0.x/api/#flask.redirect), [url_for](https://flask.palletsprojects.com/en/2.0.x/api/#flask.url_for), 
 [flash](https://flask.palletsprojects.com/en/2.0.x/patterns/flashing) e [session](https://flask.palletsprojects.com/en/2.0.x/api/#flask.session)
+
+Mais detalhes no [wiki](https://github.com/myplayareas/myappflask/wiki)
