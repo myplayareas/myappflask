@@ -3,7 +3,7 @@ Aplicação Flask de exemplo
 
 Aplicação flask exemplo 1
 
-1. Esta aplicação de exemplo deverá ter seguintes funcionalidades
+1. Esta aplicação de exemplo deverá ter seguintes funcionalidades.
 
 1.1 A aplicação deve exibir uma tela pública com as opções de registro e login de usuário.
 
@@ -11,9 +11,11 @@ Aplicação flask exemplo 1
 
 1.3 A aplicação deverá exibir um formulário de registro para registrar novos usuários.
 
-1.4 A aplicação deverá exbir um formulário de login para o login dos usuários
+1.4 A aplicação deverá exbir um formulário de login para o login dos usuários.
 
-1.5 O usário logado poderá visualizar uma lista de todos os usuários registrados na aplicação
+1.5 Cada usuário poderá cadastrar seus próprios repositórios.
+
+1.6 O usário logado poderá visualizar uma lista de todos os seus repositórios cadastrados.
 
 2. Estrutura da aplicação 
 
@@ -26,7 +28,8 @@ Aplicação flask exemplo 1
     ├── home.html
     ├── index.html
     ├── login.html
-    └── register.html
+    ├── register.html
+    └── repository.html
 ```
 
 (1) Responsável por definir a estrutura de pacotes da aplicação
