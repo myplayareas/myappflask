@@ -1,3 +1,5 @@
+#from . import db
+
 class Usuario:
     repositorios = []
     def __init__(self, id, name, username, email, password):
