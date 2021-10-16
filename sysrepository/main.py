@@ -1,7 +1,8 @@
-from sysrepository import app
+from sysrepository import app, forms
 from flask import render_template, request, redirect, url_for, flash, session
 import datetime
 from sysrepository import dao
+from sysrepository import forms
 
 repositorioUsuarios = dao.RepositorioUsuarios()
 repositorioRepositorios = dao.RepositorioRepositorios()
@@ -28,22 +29,26 @@ def home_page():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register_page():
-    if request.method == 'POST':
-        username = request.form['username']
-        name = request.form['name']
-        email = request.form['email']
-        password = request.form['password']
-        confirma_password = request.form['confirma_password']
+    form = forms.RegisterForm()
+
+    if form.validate_on_submit():
+        name = form.name.data
+        username = form.username.data
+        email = form.email.data
+        password = form.password.data
+        confirma_password = form.confirma_password.data
 
         if repositorioUsuarios.consulta_usuario_por_nome(username) is None:
             usuario = dao.Usuario(name=name, username=username, email=email, password=password)
             repositorioUsuarios.insere_usuario(usuario)
             flash(f'Usuario {usuario.username} inserido com sucesso!', category='success')
             return redirect(url_for('login_page'))
+        flash(f'Usuário {username} já existe!', category='danger')
+    if form.errors != {}: #If there are not errors from the validations
+        for err_msg in form.errors.values():
+            flash(f'There was an error with creating a user: {err_msg}', category='danger')
 
-        flash('Usuário já existe!', category='danger')
-
-    return render_template('register.html')
+    return render_template('register.html', form=form)
 
 def valida_login(username, password):
     usuario = repositorioUsuarios.consulta_usuario_por_nome(username)
