@@ -62,9 +62,10 @@ def valida_login(username, password):
 
 @app.route('/login', methods=['GET', 'POST'])
 def login_page():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
+    form = forms.LoginForm()
+    if form.validate_on_submit():
+        username = form.username.data
+        password = form.password.data
 
         if valida_login(username, password):        
             usuario = repositorioUsuarios.consulta_usuario_por_nome(username)
@@ -75,7 +76,11 @@ def login_page():
         # se as informacoes forem invalidas devolve mensagem de erro.
         flash('Usuário ou senha inválida!', category='danger')
 
-    return render_template('login.html')
+    if form.errors != {}: #If there are not errors from the validations
+        for err_msg in form.errors.values():
+            flash(f'There was an error with user login: {err_msg}', category='danger')
+
+    return render_template('login.html', form=form)
 
 @app.route('/logout')
 def logout():
@@ -97,22 +102,26 @@ def repositorio_ja_existe(name, link, lista):
 
 @app.route('/repository', methods=['GET', 'POST'])
 def repository_page():
-    if request.method == 'POST':
-        name = request.form['name']
-        link = request.form['link']
+    form = forms.RepositoryForm()
+
+    if form.validate_on_submit():
+        name = form.name.data
+        link = form.link.data
 
         lista_repositorios_do_usuario = repositorioRepositorios.consulta_repositorios_por_id_usuario(session['user_id'])
         # se o repositorio ainda não existe na lista de repositorios do usuario logado insere na lista de repositorios do usuario logado
         if not repositorio_ja_existe(name, link, lista_repositorios_do_usuario):
             repositorio = dao.Repositorio(name=name, link=link, creation_date=datetime.datetime.now(), 
                                             analysis_date=None, analysed=0, owner=session['user_id'])
-            
             repositorioRepositorios.insere_repositorio(repositorio)
-
             flash(f'Repositório {repositorio.name} inserido com sucesso!', category='success')
 
             return redirect(url_for('home_page'))
 
         flash('Repositório já existe!', category='danger')
 
-    return render_template('repository.html')
+    if form.errors != {}: #If there are not errors from the validations
+        for err_msg in form.errors.values():
+            flash(f'There was an error with new repository: {err_msg}', category='danger')
+
+    return render_template('repository.html', form=form)

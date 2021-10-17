@@ -26,18 +26,23 @@
 
     <h1>Cadastro de Repositório</h1>
 
-    <form method="post">
-        <label for="name">Name</label>
-        <input name="name" id="name" required><br>
+    <form method="POST" class="form-signin" >
+      {{ form.hidden_tag() }}
+      <h1 class="h3 mb-3 font-weight-normal">
+          New Reporitory
+      </h1>
+      <br>
+      {{ form.name.label() }}
+      {{ form.name(class="form-control", placeholder="Reporitory Name") }}
 
-        <label for="link">Link</label>
-        <input name="link" id="link" required><br>
-        
-        <input type="submit" value="Novo">
-    </form>
+      {{ form.link.label() }}
+      {{ form.link(class="form-control", placeholder="Repository Link") }}
 
-    <br>
-    <a href="{{ url_for('home_page') }}">Home</a>
+      <br>
+      {{ form.submit(class="btn btn-lg btn-block btn-primary") }}
+      <br>
+
+      <a href="{{ url_for('home_page') }}">Home</a>
 
     <!-- Optional JavaScript; choose one of the two! -->
 

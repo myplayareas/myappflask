@@ -11,8 +11,8 @@ class Usuario(db.Model):
 
 class Repositorio(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
-    name = db.Column(db.String(length=30), nullable=False, unique=True)
-    link = db.Column(db.String(length=1024), nullable=False, unique=True)
+    name = db.Column(db.String(length=30), nullable=False, unique=False)
+    link = db.Column(db.String(length=1024), nullable=False, unique=False)
     creation_date = db.Column(db.DateTime, nullable=False, default=datetime.now)
     analysis_date = db.Column(db.DateTime, nullable=True, default=None)
     analysed = db.Column(db.Integer(), nullable=True, default=0)
