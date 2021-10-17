@@ -3,6 +3,7 @@ from flask import render_template, request, redirect, url_for, flash, session
 import datetime
 from sysrepository import dao
 from sysrepository import forms
+from flask_login import login_user, logout_user, login_required, current_user
 
 repositorioUsuarios = dao.RepositorioUsuarios()
 repositorioRepositorios = dao.RepositorioRepositorios()
@@ -14,15 +15,11 @@ def index_page():
 
 # Dashboard do usuario logado
 @app.route('/home')
+@login_required
 def home_page():
     try: 
-        usuario_logado = repositorioUsuarios.consulta_usuario_por_id(session['user_id'])
-        if usuario_logado is None:
-            return redirect(url_for("logout"))
-
-        repositorios_do_usuario = repositorioRepositorios.consulta_repositorios_por_id_usuario(session['user_id'])
-
-        return render_template('home.html', repositorios=repositorios_do_usuario, usuario_logado=usuario_logado)
+        repositorios_do_usuario = repositorioRepositorios.consulta_repositorios_por_id_usuario(current_user.get_id())
+        return render_template('home.html', repositorios=repositorios_do_usuario)
     except Exception as e:
         print(f'Erro: {e}')
         return redirect(url_for("login_page"))
@@ -69,7 +66,7 @@ def login_page():
 
         if valida_login(username, password):        
             usuario = repositorioUsuarios.consulta_usuario_por_nome(username)
-            session['user_id'] = usuario.id
+            login_user(usuario)
             flash(f'Usuário {usuario.username} logado com sucesso!', category='success')
             print(f'Name: {usuario.name}, Username: {usuario.username}, logou as: {datetime.datetime.now()}')
             return redirect(url_for('home_page'))
@@ -84,11 +81,8 @@ def login_page():
 
 @app.route('/logout')
 def logout():
-    usuario = repositorioUsuarios.consulta_usuario_por_id(session['user_id'])
-    if usuario is not None: 
-        if session is not None:
-            session.clear()
-            flash(f'Usuário {usuario.username} deslogado com sucesso!', category='success')
+    logout_user()
+    flash(f'Usuário deslogado com sucesso!', category='success')
 
     return redirect(url_for('login_page'))
 
@@ -101,6 +95,7 @@ def repositorio_ja_existe(name, link, lista):
     return checa
 
 @app.route('/repository', methods=['GET', 'POST'])
+@login_required
 def repository_page():
     form = forms.RepositoryForm()
 
@@ -108,11 +103,11 @@ def repository_page():
         name = form.name.data
         link = form.link.data
 
-        lista_repositorios_do_usuario = repositorioRepositorios.consulta_repositorios_por_id_usuario(session['user_id'])
+        lista_repositorios_do_usuario = repositorioRepositorios.consulta_repositorios_por_id_usuario(current_user.get_id())
         # se o repositorio ainda não existe na lista de repositorios do usuario logado insere na lista de repositorios do usuario logado
         if not repositorio_ja_existe(name, link, lista_repositorios_do_usuario):
             repositorio = dao.Repositorio(name=name, link=link, creation_date=datetime.datetime.now(), 
-                                            analysis_date=None, analysed=0, owner=session['user_id'])
+                                            analysis_date=None, analysed=0, owner=current_user.get_id())
             repositorioRepositorios.insere_repositorio(repositorio)
             flash(f'Repositório {repositorio.name} inserido com sucesso!', category='success')
 
